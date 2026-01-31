@@ -24,7 +24,7 @@
 
 ### 使用npx安装
 ```bash
-npx openclaw-skills add https://github.com/adcwangfeng/whatsapp-message-handler
+npx skills add https://github.com/adcwangfeng/whatsapp-message-handler
 ```
 
 ### 手动安装
