@@ -1,0 +1,37 @@
+{
+  "name": "WhatsApp消息处理技能",
+  "id": "whatsapp-message-handler",
+  "version": "1.0.0",
+  "description": "处理WhatsApp多模块消息的接收和响应系统",
+  "enabled": true,
+  "dependencies": [],
+  "settings": {
+    "autoConnect": true,
+    "messageProcessing": true,
+    "responseGeneration": true,
+    "logging": true,
+    "connector": {
+      "maxMessageSize": 16777216,
+      "messageTimeout": 30000,
+      "reconnectInterval": 5000,
+      "maxReconnectAttempts": 10
+    },
+    "processing": {
+      "maxConcurrentMessages": 10,
+      "retryAttempts": 3,
+      "retryDelay": 1000
+    }
+  },
+  "endpoints": {
+    "receive": "/whatsapp/receive",
+    "send": "/whatsapp/send",
+    "status": "/whatsapp/status",
+    "history": "/whatsapp/history"
+  },
+  "permissions": [
+    "whatsapp.send",
+    "whatsapp.receive",
+    "storage.write",
+    "network.access"
+  ]
+}
