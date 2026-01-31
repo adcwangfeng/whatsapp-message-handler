@@ -12,6 +12,14 @@ else
   echo "✅ Node.js 已安装: $(node --version)"
 fi
 
+# 检查npm
+if ! [ -x "$(command -v npm)" ]; then
+  echo "❌ 错误: npm 未安装" >&2
+  exit 1
+else
+  echo "✅ npm 已安装: $(npm --version)"
+fi
+
 # 创建必要的目录
 echo "📁 创建目录结构..."
 mkdir -p /Users/wangfeng/.openclaw/skills/whatsapp-message-handler/handlers
@@ -21,18 +29,35 @@ if [ ! -f "package.json" ]; then
     echo "📦 创建package.json..."
     cat > package.json << EOF
 {
-  "name": "whatsapp-message-handler",
+  "name": "openclaw-whatsapp-message-handler",
   "version": "1.0.0",
-  "description": "WhatsApp multi-module message processing skill",
+  "description": "OpenClaw skill for handling WhatsApp multi-module messages with support for various message types",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "node test.js"
   },
-  "keywords": ["whatsapp", "messaging", "automation", "openclaw", "skills"],
-  "author": "OpenClaw",
+  "keywords": [
+    "openclaw",
+    "whatsapp",
+    "messaging",
+    "automation",
+    "integration"
+  ],
+  "author": "OpenClaw User",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.18.0",
+    "axios": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adcwangfeng/whatsapp-message-handler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adcwangfeng/whatsapp-message-handler/issues"
+  },
+  "homepage": "https://github.com/adcwangfeng/whatsapp-message-handler#readme"
 }
 EOF
 fi
@@ -43,17 +68,13 @@ npm install
 
 # 验证安装
 echo "🔍 验证系统功能..."
-node -e "
-try {
-  const WhatsAppMessageHandler = require('./index.js');
-  const handler = new WhatsAppMessageHandler();
-  console.log('✅ WhatsApp消息处理技能验证通过');
-  console.log('💡 技能已准备就绪，可以处理WhatsApp消息');
-} catch (error) {
-  console.error('❌ 验证失败:', error.message);
-  process.exit(1);
-}
-"
+node test.js
+if [ $? -eq 0 ]; then
+    echo "✅ WhatsApp消息处理技能验证通过"
+else
+    echo "❌ 系统验证失败，请检查配置"
+    exit 1
+fi
 
 # 设置权限
 echo "🔒 设置文件权限..."
@@ -68,10 +89,12 @@ echo "   - 智能消息路由"
 echo "   - 自动回复生成"
 echo "   - 命令处理系统"
 echo "   - 消息历史记录"
+echo "   - 安全内容过滤"
 echo ""
 echo "💡 使用方法："
 echo "   1. 系统将自动集成到OpenClaw"
 echo "   2. 可通过API调用处理WhatsApp消息"
 echo "   3. 支持多种消息类型和命令"
+echo "   4. 包含内容安全检查机制"
 echo ""
 echo "🚀 技能已准备就绪，可以开始处理WhatsApp消息！"

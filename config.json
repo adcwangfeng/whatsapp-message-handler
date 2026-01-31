@@ -2,36 +2,64 @@
   "name": "WhatsApp消息处理技能",
   "id": "whatsapp-message-handler",
   "version": "1.0.0",
-  "description": "处理WhatsApp多模块消息的接收和响应系统",
+  "description": "专门处理WhatsApp多模块消息的接收和响应系统，支持文本、图片、文件等多种消息类型的处理",
   "enabled": true,
-  "dependencies": [],
+  "dependencies": [
+    "node.js",
+    "express",
+    "axios"
+  ],
   "settings": {
-    "autoConnect": true,
-    "messageProcessing": true,
-    "responseGeneration": true,
-    "logging": true,
-    "connector": {
-      "maxMessageSize": 16777216,
-      "messageTimeout": 30000,
-      "reconnectInterval": 5000,
-      "maxReconnectAttempts": 10
+    "connectionTimeout": 30000,
+    "maxMessageSize": 16777216,
+    "supportedMediaTypes": [
+      "image",
+      "document",
+      "audio",
+      "video",
+      "location",
+      "contact"
+    ],
+    "messageProcessing": {
+      "enableParsing": true,
+      "enableRouting": true,
+      "enableAutoReply": true,
+      "enableHistory": true
     },
-    "processing": {
-      "maxConcurrentMessages": 10,
-      "retryAttempts": 3,
-      "retryDelay": 1000
+    "security": {
+      "enableContentFilter": true,
+      "allowedDomains": [
+        "*.whatsapp.net",
+        "*.facebook.com"
+      ],
+      "blockedExtensions": [
+        ".exe",
+        ".bat",
+        ".scr",
+        ".com"
+      ]
     }
   },
   "endpoints": {
-    "receive": "/whatsapp/receive",
-    "send": "/whatsapp/send",
-    "status": "/whatsapp/status",
-    "history": "/whatsapp/history"
+    "webhook": "/webhook/whatsapp",
+    "status": "/status/whatsapp",
+    "health": "/health/whatsapp"
   },
   "permissions": [
-    "whatsapp.send",
-    "whatsapp.receive",
-    "storage.write",
-    "network.access"
-  ]
+    "messages:read",
+    "messages:send",
+    "media:upload",
+    "contacts:read"
+  ],
+  "metadata": {
+    "category": "communication",
+    "complexity": "medium",
+    "estimatedTime": "10 minutes",
+    "tags": [
+      "whatsapp",
+      "messaging",
+      "automation",
+      "integration"
+    ]
+  }
 }

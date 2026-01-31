@@ -70,6 +70,29 @@ async function testWhatsAppSkill() {
     const imageResult = await handler.router.handleMessage(parsedImage);
     console.log('✅ 图片消息处理成功');
     
+    // 测试多种消息类型
+    console.log('\n📋 7. 测试多种消息类型...');
+    const messageTypes = [
+      { type: 'document', content: 'Document received', filename: 'report.pdf' },
+      { type: 'location', latitude: 40.7128, longitude: -74.0060, address: 'New York, NY' },
+      { type: 'contact', contactName: 'John Doe', contactPhone: '+1234567890' },
+      { type: 'audio', content: 'Audio message', duration: 30 },
+      { type: 'video', content: 'Video message', duration: 120 }
+    ];
+    
+    for (let i = 0; i < messageTypes.length; i++) {
+      const msg = {
+        id: `multi_msg_${i+1}`,
+        from: '+1234567890',
+        timestamp: new Date(),
+        ...messageTypes[i]
+      };
+      
+      const parsedMsg = handler.parser.parseMessage(msg);
+      const result = await handler.router.handleMessage(parsedMsg);
+      console.log(`   ✅ ${messageTypes[i].type} 消息处理成功`);
+    }
+    
     console.log('\n🎉 所有测试通过！');
     console.log('📱 WhatsApp消息处理技能功能完整');
     
@@ -80,11 +103,21 @@ async function testWhatsAppSkill() {
     console.log('   - 处理器数量:', status.handlers);
     console.log('   - 模板数量:', status.templates);
     
+    return true;
+    
   } catch (error) {
     console.error('❌ 测试失败:', error);
     console.error('详细错误:', error.stack);
+    return false;
   }
 }
 
 // 运行测试
-testWhatsAppSkill();
+testWhatsAppSkill().then(success => {
+  if (success) {
+    console.log('\n✅ 测试完成 - 所有功能正常');
+  } else {
+    console.log('\n❌ 测试完成 - 存在问题');
+    process.exit(1);
+  }
+});
